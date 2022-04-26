@@ -10,7 +10,7 @@ import os
 # Initial states cosntants
 P0 = 0.2
 TMAX = 1000
-TSKIP = 100
+TTRANS = 900
 NREP = 20
 
 MU = 0.5
@@ -32,25 +32,25 @@ def update_node_state(g, state, old_state, vertex_id, mu=MU, beta=BETA):
 
 """
 Applies one simulation to the graph in argument and returns the infected ratio
-list of length TMAX - TSKIP
+list of length TMAX - TTRANS
 """
 start_time = time.time()
 def simulation(g, len_g, mu=MU, beta=BETA):
     state = [np.random.binomial(1, P0) for _ in range(len_g)] # 1 means infected
     old_state = state[:]
 
-    infected_ratio_list = np.zeros(TMAX - TSKIP)
+    infected_ratio_list = np.zeros(TMAX - TTRANS)
 
     # Simulation loop
     for i in range(TMAX):
         old_state = state[:]
 
         # To skip the saving of transionary states
-        if i >= TSKIP:
+        if i >= TTRANS:
             for j in range(len_g):
-                infected_ratio_list[i - TSKIP] += update_node_state(g, state, old_state, j, mu, beta)
+                infected_ratio_list[i - TTRANS] += update_node_state(g, state, old_state, j, mu, beta)
 
-            infected_ratio_list[i - TSKIP] /= len_g
+            infected_ratio_list[i - TTRANS] /= len_g
 
         else:
             for j in range(len_g):
@@ -59,7 +59,7 @@ def simulation(g, len_g, mu=MU, beta=BETA):
     return infected_ratio_list
 
 
-len_g = 500
+len_g = 1000
 g = ig.Graph.Barabasi(len_g, 5)
 
 """
@@ -67,7 +67,7 @@ Runs n simulations and returns the average over all simulations
 of the average infected ratio on a network
 """
 def get_avg_infected(g, len_g, mu, beta, n=NREP):
-    avg_infected_ratio = np.zeros(TMAX - TSKIP)
+    avg_infected_ratio = np.zeros(TMAX - TTRANS)
 
     for i in tqdm(range(n)):
         infected_ratio_list = simulation(g, len_g, mu, beta)
@@ -103,6 +103,7 @@ def iterate_over_beta(mu, beta_list, model_name, plot=False):
     return avg_over_beta_list
 
 # Simple plot
+print("Simple plot of 5 different values of Beta")
 beta_list = np.linspace(0.1, 1, 5)
 plt.plot(iterate_over_beta(MU, beta_list, "BA", plot=True))
 
@@ -112,8 +113,10 @@ plt.title(f"BA, SIS(p0={P0}, mu={MU}, various beta)(t)")
 plt.show()
 
 # Large beta list plot and different mu
+print("Complex plot with different mu and beta values")
+STEP_BETA = 0.02
 for mu in [0.1, 0.5, 0.9]:
-    beta_list = np.linspace(0.01, 1, int((1-0.01)/0.02))
+    beta_list = np.linspace(0.01, 1, int((1-0.01)/STEP_BETA))
     plt.plot(iterate_over_beta(mu, beta_list, "BA"))
 
     plt.xlabel("beta")
