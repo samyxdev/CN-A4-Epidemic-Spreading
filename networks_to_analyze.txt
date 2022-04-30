@@ -1,0 +1,15 @@
+Performed MC simulations on different SF networks for RP(reactive process).
+
+10 plots: (different random scale-free networks satisfying generated using the CONFIGURATION MODEL)
+	--> fix size N of the net to 500 or 1000 nodes and try different values for gamma (we may try e.g. : gamma =  2.7, 3.0, 3.3) 
+	-->  generate different BA nets( i.e. fixed gamma) but with different values of N (we may try N = 500 and N = 1000)
+	--> try 1 real network (e.g. airports)
+	-->
+	-->
+
+
+
+REMINDER: 
+--------AT LEAST 10 PLOTS (i.e. simulations)
+--------N should be at least 500
+--------SAVE ALL THE GENERATED NETWORKS
