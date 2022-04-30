@@ -13,3 +13,9 @@ REMINDER:
 --------AT LEAST 10 PLOTS (i.e. simulations)
 --------N should be at least 500
 --------SAVE ALL THE GENERATED NETWORKS
+
+
+
+I'm already doing:
+BA with N = 500; m = 5
+BA with N = 1000; m = 5
